@@ -27,12 +27,6 @@ function Index() {
   return (
     <main className="bg-background">
       <ScrollFrames />
-      <section className="mx-auto max-w-3xl px-6 py-24 text-center">
-        <h2 className="text-2xl font-semibold text-foreground">End of sequence</h2>
-        <p className="mt-3 text-muted-foreground">
-          50 frames rendered to canvas and driven entirely by scroll position.
-        </p>
-      </section>
     </main>
   );
 }
