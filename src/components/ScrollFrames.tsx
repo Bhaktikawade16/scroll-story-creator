@@ -5,8 +5,7 @@ export function ScrollFrames() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imagesRef = useRef<HTMLImageElement[]>([]);
-  const [loaded, setLoaded] = useState(0);
-  const [progress, setProgress] = useState(0);
+  const [, setLoaded] = useState(0);
 
   useEffect(() => {
     let done = 0;
@@ -54,7 +53,6 @@ export function ScrollFrames() {
         const rect = el.getBoundingClientRect();
         const total = el.offsetHeight - window.innerHeight;
         const p = total > 0 ? Math.min(Math.max(-rect.top / total, 0), 1) : 0;
-        setProgress(p);
         const idx = Math.min(
           frameUrls.length - 1,
           Math.round(p * (frameUrls.length - 1)),
@@ -76,40 +74,6 @@ export function ScrollFrames() {
     <div ref={containerRef} className="relative" style={{ height: "500vh" }}>
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-background">
         <canvas ref={canvasRef} className="h-full w-full" />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-black/40" />
-
-        <div className="pointer-events-none absolute inset-0 flex flex-col justify-between p-6 md:p-10">
-          <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-on-media/80">
-            <span>Scroll Sequence</span>
-            <span>
-              {String(
-                Math.min(
-                  frameUrls.length,
-                  Math.round(progress * (frameUrls.length - 1)) + 1,
-                ),
-              ).padStart(2, "0")}{" "}
-              / {frameUrls.length}
-            </span>
-          </div>
-
-          <div className="space-y-4">
-            <h1 className="max-w-2xl text-4xl font-semibold leading-tight tracking-tight text-on-media md:text-6xl">
-              Light moves as you scroll
-            </h1>
-            <div className="h-px w-full bg-on-media/25">
-              <div
-                className="h-px bg-on-media transition-[width] duration-75"
-                style={{ width: `${progress * 100}%` }}
-              />
-            </div>
-          </div>
-        </div>
-
-        {loaded < frameUrls.length && (
-          <div className="absolute bottom-4 right-6 text-xs text-on-media/60">
-            loading {loaded}/{frameUrls.length}
-          </div>
-        )}
       </div>
     </div>
   );
