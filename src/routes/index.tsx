@@ -1,24 +1,38 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { ScrollFrames } from "@/components/ScrollFrames";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Scroll Frame Sequence — Ambient Light" },
+      {
+        name: "description",
+        content:
+          "A scroll-driven frame-by-frame animation of ambient light sweeping across a room.",
+      },
+      { property: "og:title", content: "Scroll Frame Sequence — Ambient Light" },
+      {
+        property: "og:description",
+        content:
+          "A scroll-driven frame-by-frame animation of ambient light sweeping across a room.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <main className="bg-background">
+      <ScrollFrames />
+      <section className="mx-auto max-w-3xl px-6 py-24 text-center">
+        <h2 className="text-2xl font-semibold text-foreground">End of sequence</h2>
+        <p className="mt-3 text-muted-foreground">
+          50 frames rendered to canvas and driven entirely by scroll position.
+        </p>
+      </section>
+    </main>
   );
 }
