@@ -1,21 +1,35 @@
-import { useEffect, useRef, useState } from "react";
-import { frameUrls } from "@/lib/frames";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
-export function ScrollFrames() {
+type Props = {
+  frames: string[];
+  /** Total scroll height of the pinned section, in vh. */
+  heightVh?: number;
+  /** Rendered above the canvas inside the pinned viewport. */
+  children?: (progress: number) => ReactNode;
+  className?: string;
+  /** Extra canvas styling driven by progress (scale etc.). */
+  canvasStyle?: (progress: number) => React.CSSProperties;
+};
+
+export function FrameSequence({
+  frames,
+  heightVh = 400,
+  children,
+  className,
+  canvasStyle,
+}: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imagesRef = useRef<HTMLImageElement[]>([]);
-  const [, setLoaded] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const progressRef = useRef(0);
 
   useEffect(() => {
-    let done = 0;
-    imagesRef.current = frameUrls.map((src) => {
+    imagesRef.current = frames.map((src, i) => {
       const img = new Image();
       img.src = src;
       img.onload = () => {
-        done += 1;
-        setLoaded(done);
-        if (done === 1) draw(0);
+        if (i === 0) draw(0);
       };
       return img;
     });
@@ -54,10 +68,14 @@ export function ScrollFrames() {
         const total = el.offsetHeight - window.innerHeight;
         const p = total > 0 ? Math.min(Math.max(-rect.top / total, 0), 1) : 0;
         const idx = Math.min(
-          frameUrls.length - 1,
-          Math.round(p * (frameUrls.length - 1)),
+          frames.length - 1,
+          Math.round(p * (frames.length - 1)),
         );
         draw(idx);
+        if (Math.abs(p - progressRef.current) > 0.004) {
+          progressRef.current = p;
+          setProgress(p);
+        }
       });
     };
     onScroll();
@@ -68,12 +86,23 @@ export function ScrollFrames() {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <div ref={containerRef} className="relative" style={{ height: "500vh" }}>
+    <div
+      ref={containerRef}
+      className={`relative ${className ?? ""}`}
+      style={{ height: `${heightVh}vh` }}
+    >
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-background">
-        <canvas ref={canvasRef} className="h-full w-full" />
+        <canvas
+          ref={canvasRef}
+          className="h-full w-full"
+          style={canvasStyle?.(progress)}
+        />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_90%_at_50%_50%,transparent_35%,var(--color-background)_100%)]" />
+        {children?.(progress)}
       </div>
     </div>
   );
