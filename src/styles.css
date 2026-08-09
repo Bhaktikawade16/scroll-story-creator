@@ -145,8 +145,41 @@
     border-color: var(--color-border);
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
   }
 }
+
+@utility font-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+@utility text-cine {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 0.92;
+  text-wrap: balance;
+}
+
+@utility glass-panel {
+  background: color-mix(in oklab, var(--color-foreground) 5%, transparent);
+  border: 1px solid color-mix(in oklab, var(--color-foreground) 12%, transparent);
+  backdrop-filter: blur(18px) saturate(140%);
+}
+
+@utility glow-accent {
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--color-accent) 30%, transparent),
+    0 20px 80px -20px color-mix(in oklab, var(--color-accent) 45%, transparent);
+}
+
