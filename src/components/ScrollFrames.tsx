@@ -76,9 +76,10 @@ export function ScrollFrames() {
     <div ref={containerRef} className="relative" style={{ height: "500vh" }}>
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-background">
         <canvas ref={canvasRef} className="h-full w-full" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-black/40" />
 
         <div className="pointer-events-none absolute inset-0 flex flex-col justify-between p-6 md:p-10">
-          <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-foreground/70">
+          <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-on-media/80">
             <span>Scroll Sequence</span>
             <span>
               {String(
@@ -92,12 +93,12 @@ export function ScrollFrames() {
           </div>
 
           <div className="space-y-4">
-            <h1 className="max-w-2xl text-4xl font-semibold leading-tight tracking-tight text-foreground md:text-6xl">
+            <h1 className="max-w-2xl text-4xl font-semibold leading-tight tracking-tight text-on-media md:text-6xl">
               Light moves as you scroll
             </h1>
-            <div className="h-px w-full bg-foreground/15">
+            <div className="h-px w-full bg-on-media/25">
               <div
-                className="h-px bg-foreground/70 transition-[width] duration-75"
+                className="h-px bg-on-media transition-[width] duration-75"
                 style={{ width: `${progress * 100}%` }}
               />
             </div>
@@ -105,7 +106,7 @@ export function ScrollFrames() {
         </div>
 
         {loaded < frameUrls.length && (
-          <div className="absolute bottom-4 right-6 text-xs text-foreground/50">
+          <div className="absolute bottom-4 right-6 text-xs text-on-media/60">
             loading {loaded}/{frameUrls.length}
           </div>
         )}
