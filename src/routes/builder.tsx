@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
+import { Atmosphere } from "@/components/Atmosphere";
 import { Navbar } from "@/components/Navbar";
+import { Tilt } from "@/components/Tilt";
 import { Reveal } from "@/components/Reveal";
 import cpuAsset from "@/assets/cpu_open.jpg.asset.json";
 
@@ -31,21 +33,22 @@ function Builder() {
   const [active, setActive] = useState("PC");
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <main className="relative min-h-screen bg-background text-foreground">
+      <Atmosphere />
       <Navbar />
-      <section className="mx-auto max-w-7xl px-6 pb-24 pt-32 sm:px-12">
+      <section className="relative z-10 mx-auto max-w-7xl px-6 pb-24 pt-32 sm:px-12">
         <Reveal>
           <p className="text-[10px] tracking-[0.35em] text-muted-foreground">
             CONFIGURATOR
           </p>
-          <h1 className="text-cine mt-6 text-[12vw] sm:text-[7vw] lg:text-[5vw]">
+          <h1 className="text-cine text-luxe mt-6 text-[12vw] sm:text-[7vw] lg:text-[5vw]">
             BUILD YOUR SETUP.
           </h1>
         </Reveal>
 
         <div className="mt-16 grid gap-10 lg:grid-cols-[1fr_280px]">
           <Reveal>
-            <div className="glass-panel relative overflow-hidden rounded-3xl">
+            <Tilt max={6}><div className="glass-panel relative overflow-hidden rounded-3xl">
               <img
                 src={cpuAsset.url}
                 alt="Setup preview"
@@ -55,7 +58,7 @@ function Builder() {
               <span className="absolute bottom-6 left-6 text-[10px] tracking-[0.3em] text-muted-foreground">
                 {active}
               </span>
-            </div>
+            </div></Tilt>
           </Reveal>
 
           <Reveal delay={0.1}>
