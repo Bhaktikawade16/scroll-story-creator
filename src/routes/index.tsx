@@ -451,7 +451,7 @@ function Index() {
               <div className="mt-16">
                 <MagneticLink
                   to="/builder"
-                  className="group relative inline-flex items-center gap-4 overflow-hidden rounded-full border border-accent/40 bg-accent/10 px-10 py-5 font-display text-xs tracking-[0.3em] text-foreground backdrop-blur-xl transition-all duration-500 hover:border-accent hover:bg-accent/20 hover:glow-accent sm:text-sm"
+                  className="group glow-accent relative inline-flex items-center gap-4 overflow-hidden rounded-full border border-accent/60 bg-background/80 px-10 py-5 font-display text-xs tracking-[0.3em] text-foreground shadow-[0_30px_90px_-30px_rgba(0,0,0,1)] backdrop-blur-2xl transition-all duration-500 hover:border-accent hover:bg-accent/25 sm:text-sm"
                 >
                   <span className="relative z-10 transition-transform duration-500 group-hover:-translate-x-1">
                     START BUILDING
