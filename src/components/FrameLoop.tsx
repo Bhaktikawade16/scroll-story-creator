@@ -64,8 +64,8 @@ export function FrameLoop({
     }
 
     const io = new IntersectionObserver(
-      ([e]) => {
-        visibleRef.current = e.isIntersecting;
+      (entries) => {
+        visibleRef.current = entries.some((e) => e.isIntersecting);
       },
       { rootMargin: "10% 0px" },
     );
