@@ -1,14 +1,26 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { Atmosphere } from "@/components/Atmosphere";
+import { Cursor } from "@/components/Cursor";
+import { FrameLoop } from "@/components/FrameLoop";
 import { FrameSequence } from "@/components/FrameSequence";
+import { Hud } from "@/components/Hud";
+import { MagneticLink } from "@/components/MagneticLink";
 import { Marquee } from "@/components/Marquee";
 import { Navbar } from "@/components/Navbar";
+import { Particles } from "@/components/Particles";
+import { Preloader } from "@/components/Preloader";
 import { Reveal } from "@/components/Reveal";
 import { ScrollProgress } from "@/components/ScrollProgress";
 import { SectionLabel } from "@/components/SectionLabel";
 import { Tilt } from "@/components/Tilt";
-import { frameUrlsA, frameUrlsB } from "@/lib/frames";
+import {
+  frameUrlsA,
+  frameUrlsB,
+  frameUrlsC,
+  frameUrlsD,
+  frameUrlsE,
+} from "@/lib/frames";
 import cpuAsset from "@/assets/cpu_open.jpg.asset.json";
 
 export const Route = createFileRoute("/")({
@@ -43,18 +55,20 @@ const PARTS = [
 ];
 
 const MARQUEE = [
-  "CINEMATIC 3D",
-  "REAL COMPONENTS",
-  "INFINITE LAYOUTS",
-  "LIGHT & MATERIAL",
-  "BUILT YOUR WAY",
+  "ENGINEERED FOR YOUR SPACE",
+  "EVERY COMPONENT MATTERS",
+  "DESIGNED AROUND YOU",
+  "BUILD WITHOUT LIMITS",
 ];
 
 function Index() {
   return (
     <main className="relative bg-background text-foreground">
+      <Preloader />
       <ScrollProgress />
       <Atmosphere />
+      <Particles />
+      <Cursor />
       <Navbar />
 
       <div className="relative z-10">
@@ -64,7 +78,7 @@ function Index() {
           <motion.div
             initial={{ opacity: 0, letterSpacing: "0.9em" }}
             animate={{ opacity: 1, letterSpacing: "0.42em" }}
-            transition={{ duration: 2.2, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ delay: 1.6, duration: 2.4, ease: [0.16, 1, 0.3, 1] }}
             className="font-display text-luxe text-center text-xs sm:text-sm"
           >
             SETUPVERSE
@@ -72,7 +86,7 @@ function Index() {
           <motion.p
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.4, duration: 1.4 }}
+            transition={{ delay: 2.8, duration: 1.4 }}
             className="mt-6 text-[10px] tracking-[0.32em] text-muted-foreground"
           >
             A CINEMATIC SETUP EXPERIENCE
@@ -80,7 +94,7 @@ function Index() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 2, duration: 1.2 }}
+            transition={{ delay: 3.4, duration: 1.2 }}
             className="absolute bottom-10 left-1/2 flex -translate-x-1/2 flex-col items-center gap-3"
           >
             <span className="text-[10px] tracking-[0.3em] text-muted-foreground">
@@ -104,31 +118,35 @@ function Index() {
             })}
           >
             {(p) => (
-              <div className="pointer-events-none absolute inset-0 flex flex-col justify-center px-6 sm:px-12 lg:px-20">
-                <div
-                  style={{
-                    opacity: Math.min(1, Math.max(0, 1 - (p - 0.55) / 0.25)),
-                    transform: `translateY(${-p * 40}px)`,
-                  }}
-                >
-                  <h1 className="text-cine text-luxe text-[16vw] leading-[0.85] sm:text-[12vw] lg:text-[9vw]">
-                    BUILD
-                    <br />
-                    YOUR SPACE.
-                  </h1>
-                  <p className="mt-6 max-w-sm text-sm font-light text-muted-foreground sm:text-base">
-                    A new way to imagine your perfect setup.
-                  </p>
+              <>
+                <Hud items={["SYSTEM / ONLINE", "01 — DISCOVER"]} />
+                <div className="pointer-events-none absolute inset-0 flex flex-col justify-center px-6 sm:px-12 lg:px-20">
+                  <div
+                    style={{
+                      opacity: Math.min(1, Math.max(0, 1 - (p - 0.55) / 0.25)),
+                      transform: `translateY(${-p * 40}px)`,
+                    }}
+                  >
+                    <h1 className="text-cine text-luxe text-[16vw] leading-[0.85] sm:text-[12vw] lg:text-[9vw]">
+                      BUILD
+                      <br />
+                      YOUR SPACE.
+                    </h1>
+                    <p className="mt-6 max-w-sm text-sm font-light text-muted-foreground sm:text-base">
+                      A new way to imagine your perfect setup.
+                    </p>
+                  </div>
+                  <div
+                    className="absolute bottom-12 right-6 hidden text-right sm:right-12 md:block"
+                    style={{ opacity: Math.min(1, p * 2) }}
+                  >
+                    <span className="text-[10px] tracking-[0.35em] text-muted-foreground">
+                      SEQUENCE 01 /{" "}
+                      {String(Math.round(p * 100)).padStart(3, "0")}
+                    </span>
+                  </div>
                 </div>
-                <div
-                  className="absolute bottom-12 right-6 hidden text-right sm:right-12 md:block"
-                  style={{ opacity: Math.min(1, p * 2) }}
-                >
-                  <span className="text-[10px] tracking-[0.35em] text-muted-foreground">
-                    SEQUENCE 01 / {String(Math.round(p * 100)).padStart(3, "0")}
-                  </span>
-                </div>
-              </div>
+              </>
             )}
           </FrameSequence>
         </section>
@@ -140,10 +158,25 @@ function Index() {
           id="how-it-works"
           className="relative flex min-h-screen items-center overflow-hidden py-32"
         >
-          <ParallaxImage />
+          <motion.div
+            initial={{ opacity: 0, scale: 1.1 }}
+            whileInView={{ opacity: 0.75, scale: 1 }}
+            viewport={{ once: false, amount: 0.2 }}
+            transition={{ duration: 2.4, ease: [0.16, 1, 0.3, 1] }}
+            className="pointer-events-none absolute right-0 top-0 h-full w-full lg:w-[62%]"
+          >
+            <FrameLoop
+              frames={frameUrlsC}
+              fps={16}
+              className="h-full w-full"
+              style={{ maskImage: "radial-gradient(70% 60% at 60% 50%, black, transparent 85%)" }}
+            />
+          </motion.div>
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-background via-background/60 to-transparent" />
+
           <div className="relative z-10 mx-auto w-full max-w-7xl px-6 sm:px-12">
             <Reveal>
-              <SectionLabel index="01" label="THE CONCEPT" />
+              <SectionLabel index="01" label="DISCOVER" />
             </Reveal>
             <Reveal>
               <h2 className="text-cine text-luxe text-[13vw] sm:text-[9vw] lg:text-[6.5vw]">
@@ -190,34 +223,55 @@ function Index() {
           })}
         >
           {(p) => (
-            <div className="pointer-events-none absolute inset-0 flex flex-col items-end justify-center px-6 text-right sm:px-12 lg:px-20">
-              {["SEE IT.", "EXPLORE IT.", "MAKE IT YOURS."].map((line, i) => (
-                <span
-                  key={line}
-                  className="text-cine text-luxe block text-[12vw] sm:text-[8vw] lg:text-[6vw]"
-                  style={{
-                    opacity: Math.min(1, Math.max(0, (p - 0.12 * i) / 0.14)),
-                    transform: `translateY(${Math.max(0, 40 - p * 400 + i * 60)}px)`,
-                    filter: `blur(${Math.max(0, 14 - p * 120 + i * 18)}px)`,
-                  }}
+            <>
+              <Hud items={["02 — EXPLORE", "SETUP_01"]} />
+              <div className="pointer-events-none absolute inset-0 flex flex-col items-end justify-center px-6 text-right sm:px-12 lg:px-20">
+                {["SEE IT.", "EXPLORE IT.", "MAKE IT YOURS."].map((line, i) => (
+                  <span
+                    key={line}
+                    className="text-cine text-luxe block text-[12vw] sm:text-[8vw] lg:text-[6vw]"
+                    style={{
+                      opacity: Math.min(1, Math.max(0, (p - 0.12 * i) / 0.14)),
+                      transform: `translateY(${Math.max(0, 40 - p * 400 + i * 60)}px)`,
+                      filter: `blur(${Math.max(0, 14 - p * 120 + i * 18)}px)`,
+                    }}
+                  >
+                    {line}
+                  </span>
+                ))}
+                <p
+                  className="mt-8 max-w-sm text-xs font-light leading-relaxed text-muted-foreground sm:text-sm"
+                  style={{ opacity: Math.min(1, Math.max(0, (p - 0.55) / 0.2)) }}
                 >
-                  {line}
-                </span>
-              ))}
-              <p
-                className="mt-8 max-w-sm text-xs font-light leading-relaxed text-muted-foreground sm:text-sm"
-                style={{ opacity: Math.min(1, Math.max(0, (p - 0.55) / 0.2)) }}
-              >
-                Explore how the PC, monitor, keyboard, mouse, chair and
-                accessories come together to create one complete workspace.
-              </p>
-            </div>
+                  Explore how the PC, monitor, keyboard, mouse, chair and
+                  accessories come together to create one complete workspace.
+                </p>
+              </div>
+            </>
           )}
         </FrameSequence>
 
         {/* SLIDE 4 — MORE THAN A PC */}
         <section className="relative flex min-h-screen items-center overflow-hidden py-32">
-          <ParallaxImage align="right" opacity={0.5} />
+          <motion.div
+            initial={{ y: 60, scale: 1.06, opacity: 0 }}
+            whileInView={{ y: -30, scale: 1.12, opacity: 0.45 }}
+            viewport={{ once: false, amount: 0.2 }}
+            transition={{ duration: 2.4, ease: [0.16, 1, 0.3, 1] }}
+            className="pointer-events-none absolute inset-y-0 left-0 h-full w-[85%]"
+          >
+            <img
+              src={cpuAsset.url}
+              alt="High-end gaming PC interior"
+              loading="lazy"
+              className="h-full w-full object-cover"
+              style={{
+                maskImage:
+                  "radial-gradient(65% 60% at 35% 50%, black, transparent 85%)",
+              }}
+            />
+          </motion.div>
+
           <div className="relative z-10 mx-auto w-full max-w-7xl px-6 sm:px-12">
             <Reveal>
               <SectionLabel index="02" label="THE COMPOSITION" />
@@ -271,17 +325,19 @@ function Index() {
             </h2>
           </Reveal>
           <Reveal delay={0.15}>
-            <Tilt className="mx-auto mt-16 w-[min(680px,90vw)]" max={6}>
-              <motion.img
-                src={cpuAsset.url}
-                alt="Open gaming PC build with liquid cooling and RGB lighting"
-                loading="lazy"
-                className="w-full rounded-2xl opacity-90 mix-blend-screen"
-                initial={{ scale: 1 }}
-                whileInView={{ scale: 1.05 }}
-                viewport={{ once: true }}
-                transition={{ duration: 4, ease: "easeOut" }}
-              />
+            <Tilt className="mx-auto mt-16 w-[min(760px,92vw)]" max={6}>
+              <div className="relative overflow-hidden rounded-3xl">
+                <FrameLoop
+                  frames={frameUrlsD}
+                  fps={14}
+                  bounce
+                  className="h-[38vh] w-full sm:h-[52vh]"
+                />
+                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(90%_80%_at_50%_50%,transparent_40%,var(--color-background)_100%)]" />
+                <span className="pointer-events-none absolute bottom-5 left-6 text-[9px] tracking-[0.32em] text-muted-foreground">
+                  PRECISION / ENGINEERING
+                </span>
+              </div>
             </Tilt>
           </Reveal>
           <Reveal delay={0.2}>
@@ -315,16 +371,19 @@ function Index() {
             <Reveal delay={0.1}>
               <Tilt className="mt-12" max={7}>
                 <div className="glass-panel relative overflow-hidden rounded-3xl">
-                  <img
-                    src={cpuAsset.url}
-                    alt="Gaming setup preview inside the SETUPVERSE configurator"
-                    loading="lazy"
-                    className="h-[46vh] w-full object-cover opacity-80 sm:h-[58vh]"
+                  <FrameLoop
+                    frames={frameUrlsE}
+                    fps={15}
+                    className="h-[46vh] w-full sm:h-[58vh]"
+                    style={{ opacity: 0.9 }}
                   />
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
                   <div className="pointer-events-none absolute left-6 top-6 flex items-center gap-2 text-[9px] tracking-[0.3em] text-muted-foreground">
                     <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />
-                    LIVE PREVIEW
+                    BUILD MODE
+                  </div>
+                  <div className="pointer-events-none absolute right-6 top-6 text-[9px] tracking-[0.3em] text-muted-foreground">
+                    03 — BUILD
                   </div>
                 </div>
               </Tilt>
@@ -335,7 +394,7 @@ function Index() {
                   <button
                     key={p.name}
                     type="button"
-                    className="glass-panel rounded-full px-5 py-2.5 text-[10px] tracking-[0.25em] text-foreground/80 transition-all duration-300 hover:scale-105 hover:text-foreground hover:glow-accent sm:text-[11px]"
+                    className="glass-panel rounded-full px-5 py-2.5 text-[10px] tracking-[0.25em] text-foreground/80 transition-all duration-500 hover:-translate-y-0.5 hover:scale-105 hover:text-foreground hover:glow-accent sm:text-[11px]"
                   >
                     {p.name}
                   </button>
@@ -347,21 +406,31 @@ function Index() {
 
         {/* SLIDE 7 — MAKE YOUR OWN SETUP */}
         <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 py-32 text-center">
-          <motion.img
-            src={cpuAsset.url}
-            alt="Complete custom gaming setup"
-            loading="lazy"
-            initial={{ scale: 1, opacity: 0.25 }}
-            whileInView={{ scale: 1.18, opacity: 0.4 }}
+          <motion.div
+            initial={{ scale: 1, opacity: 0.2 }}
+            whileInView={{ scale: 1.14, opacity: 0.45 }}
             viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 8, ease: "easeOut" }}
-            className="pointer-events-none absolute inset-0 h-full w-full object-cover mix-blend-screen"
-          />
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(90%_70%_at_50%_50%,transparent_10%,var(--color-background)_85%)]" />
+            transition={{ duration: 9, ease: "easeOut" }}
+            className="pointer-events-none absolute inset-0"
+          >
+            <FrameLoop
+              frames={frameUrlsC}
+              fps={12}
+              bounce
+              className="h-full w-full"
+            />
+          </motion.div>
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(90%_70%_at_50%_50%,transparent_8%,var(--color-background)_82%)]" />
+          <div className="light-sweep pointer-events-none absolute inset-0" />
 
           <div className="relative">
             <Reveal>
-              <h2 className="text-cine text-luxe text-[15vw] sm:text-[10vw] lg:text-[7.5vw]">
+              <span className="text-[9px] tracking-[0.4em] text-muted-foreground">
+                04 / EXPERIENCE
+              </span>
+            </Reveal>
+            <Reveal>
+              <h2 className="text-cine text-luxe mt-8 text-[15vw] sm:text-[10vw] lg:text-[7.5vw]">
                 MAKE
                 <br />
                 YOUR OWN
@@ -379,16 +448,20 @@ function Index() {
               </p>
             </Reveal>
             <Reveal delay={0.35}>
-              <Link
-                to="/builder"
-                className="group relative mt-16 inline-flex items-center gap-4 overflow-hidden rounded-full border border-accent/40 bg-accent/10 px-10 py-5 font-display text-xs tracking-[0.3em] text-foreground backdrop-blur-xl transition-all duration-500 hover:border-accent hover:bg-accent/20 hover:glow-accent sm:text-sm"
-              >
-                <span className="relative z-10">START BUILDING</span>
-                <span className="relative z-10 transition-transform duration-500 group-hover:translate-x-2">
-                  →
-                </span>
-                <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-accent/25 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-              </Link>
+              <div className="mt-16">
+                <MagneticLink
+                  to="/builder"
+                  className="group glow-accent relative inline-flex items-center gap-4 overflow-hidden rounded-full border border-accent/60 bg-background/80 px-10 py-5 font-display text-xs tracking-[0.3em] text-foreground shadow-[0_30px_90px_-30px_rgba(0,0,0,1)] backdrop-blur-2xl transition-all duration-500 hover:border-accent hover:bg-accent/25 sm:text-sm"
+                >
+                  <span className="relative z-10 transition-transform duration-500 group-hover:-translate-x-1">
+                    START BUILDING
+                  </span>
+                  <span className="relative z-10 transition-transform duration-500 group-hover:translate-x-2">
+                    →
+                  </span>
+                  <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-accent/30 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+                </MagneticLink>
+              </div>
             </Reveal>
           </div>
         </section>
@@ -403,33 +476,5 @@ function Index() {
         </footer>
       </div>
     </main>
-  );
-}
-
-function ParallaxImage({
-  align = "left",
-  opacity = 0.6,
-}: {
-  align?: "left" | "right";
-  opacity?: number;
-}) {
-  return (
-    <motion.div
-      initial={{ y: 60, scale: 1.04, opacity: 0 }}
-      whileInView={{ y: -40, scale: 1.12, opacity }}
-      viewport={{ once: false, amount: 0.2 }}
-      transition={{ duration: 2.4, ease: [0.16, 1, 0.3, 1] }}
-      className={`pointer-events-none absolute top-0 h-full w-[85%] ${
-        align === "left" ? "right-0" : "left-0"
-      }`}
-    >
-      <img
-        src={cpuAsset.url}
-        alt="High-end gaming PC interior"
-        loading="lazy"
-        className="h-full w-full object-cover mix-blend-screen"
-      />
-      <div className="absolute inset-0 bg-[radial-gradient(70%_70%_at_50%_50%,transparent,var(--color-background))]" />
-    </motion.div>
   );
 }
