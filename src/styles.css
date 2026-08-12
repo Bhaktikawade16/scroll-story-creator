@@ -277,3 +277,66 @@
   }
 }
 
+
+/* ---- Final polish: atmosphere, lighting, micro-motion ---- */
+
+@utility hud-float {
+  animation: hud-float 11s ease-in-out infinite alternate;
+}
+
+@utility light-sweep {
+  background: linear-gradient(
+    115deg,
+    transparent 35%,
+    color-mix(in oklab, var(--color-accent) 9%, transparent) 50%,
+    transparent 65%
+  );
+  background-size: 260% 260%;
+  animation: light-sweep 26s ease-in-out infinite;
+}
+
+@utility studio-floor {
+  background:
+    radial-gradient(
+      120% 80% at 50% 0%,
+      color-mix(in oklab, var(--color-primary) 7%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      100% 70% at 50% 100%,
+      color-mix(in oklab, var(--violet) 6%, transparent),
+      transparent 60%
+    );
+}
+
+@utility vignette {
+  background: radial-gradient(
+    120% 90% at 50% 45%,
+    transparent 45%,
+    color-mix(in oklab, var(--color-background) 92%, transparent) 100%
+  );
+}
+
+@keyframes hud-float {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate3d(0, -18px, 0);
+    opacity: 0.4;
+  }
+}
+
+@keyframes light-sweep {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
