@@ -189,7 +189,7 @@ export default function Stage({
   autoSpin?: boolean;
   className?: string;
   /** When provided, renders the full desk setup with these pieces assembled. */
-  setup?: string[];
+  setup?: string[] | undefined;
 }) {
   const dragRef = useRef(0);
   const state = useRef({ down: false, x: 0, moved: 0 });

@@ -10,12 +10,12 @@ export type { Category };
  * The 3D scene is procedural geometry, so it stays razor sharp at any size.
  */
 export function ProductStage(props: {
-  category?: Category;
-  exploded?: boolean;
-  onToggleExplode?: () => void;
-  autoSpin?: boolean;
-  setup?: string[];
-  className?: string;
+  category?: Category | undefined;
+  exploded?: boolean | undefined;
+  onToggleExplode?: (() => void) | undefined;
+  autoSpin?: boolean | undefined;
+  setup?: string[] | undefined;
+  className?: string | undefined;
 }) {
   const [ready, setReady] = useState(false);
   useEffect(() => setReady(true), []);
