@@ -21,7 +21,7 @@ import {
   frameUrlsD,
   frameUrlsE,
 } from "@/lib/frames";
-import cpuAsset from "@/assets/cpu_open.jpg.asset.json";
+import { ProductStage } from "@/components/ProductStage";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -260,16 +260,7 @@ function Index() {
             transition={{ duration: 2.4, ease: [0.16, 1, 0.3, 1] }}
             className="pointer-events-none absolute inset-y-0 left-0 h-full w-[85%]"
           >
-            <img
-              src={cpuAsset.url}
-              alt="High-end gaming PC interior"
-              loading="lazy"
-              className="h-full w-full object-cover"
-              style={{
-                maskImage:
-                  "radial-gradient(65% 60% at 35% 50%, black, transparent 85%)",
-              }}
-            />
+            <ProductStage className="h-full w-full" />
           </motion.div>
 
           <div className="relative z-10 mx-auto w-full max-w-7xl px-6 sm:px-12">
