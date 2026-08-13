@@ -7,6 +7,7 @@ import {
 } from "@react-three/drei";
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+import { SetupModel } from "./SetupModel";
 import {
   ACCENT,
   ChairModel,
@@ -180,12 +181,15 @@ export default function Stage({
   onToggleExplode,
   autoSpin = true,
   className = "",
+  setup,
 }: {
   category?: Category;
   exploded?: boolean;
   onToggleExplode?: () => void;
   autoSpin?: boolean;
   className?: string;
+  /** When provided, renders the full desk setup with these pieces assembled. */
+  setup?: string[];
 }) {
   const dragRef = useRef(0);
   const state = useRef({ down: false, x: 0, moved: 0 });
@@ -223,7 +227,11 @@ export default function Stage({
         <ReactiveLights />
         <Environment preset="city" environmentIntensity={0.35} />
         <Rig dragRef={dragRef} autoSpin={autoSpin && !exploded}>
-          <Morph category={category} exploded={exploded} />
+          {setup ? (
+            <SetupModel active={setup} />
+          ) : (
+            <Morph category={category} exploded={exploded} />
+          )}
         </Rig>
         <Grid
           position={[0, -1.55, 0]}
