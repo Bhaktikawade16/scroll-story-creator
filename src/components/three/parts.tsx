@@ -127,7 +127,7 @@ export function PCModel({ exploded }: { exploded: boolean }) {
         <group position={[0.05, 0.42, 0.1]}>
           <mesh>
             <boxGeometry args={[0.42, 0.5, 0.5]} />
-            <meshStandardMaterial {...metal("#20design".slice(0, 7) || "#202634", 0.35, 0.9)} />
+            <meshStandardMaterial {...metal("#202634", 0.35, 0.9)} />
           </mesh>
           <Fan position={[-0.24, 0, 0]} size={0.22} />
         </group>
