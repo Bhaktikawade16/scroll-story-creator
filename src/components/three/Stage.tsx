@@ -183,11 +183,11 @@ export default function Stage({
   className = "",
   setup,
 }: {
-  category?: Category;
-  exploded?: boolean;
-  onToggleExplode?: () => void;
-  autoSpin?: boolean;
-  className?: string;
+  category?: Category | undefined;
+  exploded?: boolean | undefined;
+  onToggleExplode?: (() => void) | undefined;
+  autoSpin?: boolean | undefined;
+  className?: string | undefined;
   /** When provided, renders the full desk setup with these pieces assembled. */
   setup?: string[] | undefined;
 }) {
