@@ -103,7 +103,7 @@ function Builder() {
                   setup={mode === "SETUP" ? chosen : undefined}
                 />
               </div>
-              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(85%_70%_at_50%_45%,transparent_45%,var(--color-background)_100%)]" />
+              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(90%_80%_at_50%_45%,transparent_65%,var(--color-background)_100%)]" />
               <div className="pointer-events-none absolute left-6 top-6 flex items-center gap-2 text-[9px] tracking-[0.3em] text-muted-foreground">
                 <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />
                 {mode === "SETUP" ? "ASSEMBLY" : active}

@@ -129,14 +129,14 @@ function ReactiveLights() {
   });
   return (
     <>
-      <ambientLight intensity={0.35} />
-      <pointLight ref={key} position={[3, 3, 4]} intensity={45} color={ACCENT} distance={22} />
-      <pointLight position={[-4, 1.4, -3]} intensity={30} color={VIOLET} distance={20} />
+      <ambientLight intensity={1.1} />
+      <pointLight ref={key} position={[3, 3, 4]} intensity={90} color={ACCENT} distance={26} />
+      <pointLight position={[-4, 1.4, -3]} intensity={60} color={VIOLET} distance={24} />
       <spotLight
         position={[0, 7, 2]}
         angle={0.6}
         penumbra={1}
-        intensity={38}
+        intensity={90}
         color="#ffffff"
       />
     </>
@@ -223,9 +223,9 @@ export default function Stage({
           gl.toneMappingExposure = 1.05;
         }}
       >
-        <PerspectiveCamera makeDefault fov={34} position={[0, 0.8, 7.4]} />
+        <PerspectiveCamera makeDefault fov={34} position={[0, 0.6, 6.2]} />
         <ReactiveLights />
-        <Environment preset="city" environmentIntensity={0.35} />
+        <Environment preset="city" environmentIntensity={0.7} />
         <Rig dragRef={dragRef} autoSpin={autoSpin && !exploded}>
           {setup ? (
             <SetupModel active={setup} />
