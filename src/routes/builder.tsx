@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Atmosphere } from "@/components/Atmosphere";
@@ -6,23 +6,10 @@ import { Cursor } from "@/components/Cursor";
 import { Navbar } from "@/components/Navbar";
 import { Reveal } from "@/components/Reveal";
 import { ProductStage } from "@/components/ProductStage";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { submitGalleryBuild } from "@/lib/gallery.server";
-import { getOwnerToken, rememberMyBuild } from "@/lib/my-builds";
 import {
   isSoundEnabled,
   playClick,
-  playSuccess,
   playThud,
   setAmbientColor,
   setSoundEnabled,
@@ -86,17 +73,11 @@ function initialConfigs(): Record<Category, PartConfig> {
 }
 
 function Builder() {
-  const navigate = useNavigate();
   const [active, setActive] = useState<Category>("PC");
   const [exploded, setExploded] = useState(false);
   const [mode, setMode] = useState<"COMPONENT" | "SETUP">("COMPONENT");
   const [included, setIncluded] = useState<Category[]>(["PC"]);
   const [configs, setConfigs] = useState<Record<Category, PartConfig>>(initialConfigs);
-
-  const [saveOpen, setSaveOpen] = useState(false);
-  const [buildName, setBuildName] = useState("");
-  const [authorName, setAuthorName] = useState("");
-  const [saving, setSaving] = useState(false);
 
   const [soundOn, setSoundOn] = useState(true);
   const [ambientOn, setAmbientOn] = useState(false);
@@ -219,32 +200,6 @@ function Builder() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode, active, configs, included]);
 
-  const handleSave = async () => {
-    if (!buildName.trim() || !authorName.trim() || chosenConfigs.length === 0) return;
-    setSaving(true);
-    try {
-      const build = await submitGalleryBuild({
-        data: {
-          name: buildName.trim(),
-          author: authorName.trim(),
-          parts: chosenConfigs,
-          ownerToken: getOwnerToken(),
-        },
-      });
-      rememberMyBuild(build.id);
-      playSuccess();
-      toast.success("Build submitted to the gallery.");
-      setSaveOpen(false);
-      setBuildName("");
-      setAuthorName("");
-      navigate({ to: "/gallery" });
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Couldn't save your build.");
-    } finally {
-      setSaving(false);
-    }
-  };
-
   const activeConfig = configs[active];
 
   return (
@@ -261,8 +216,7 @@ function Builder() {
             <h2 className="text-cine mt-3 text-2xl">BUILD YOUR SETUP.</h2>
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
               Click a component to select it, then customize its color, style, finish and
-              glow below. Switch to SETUP to assemble pieces together on a desk, then save
-              your build to the public gallery.
+              glow below. Switch to SETUP to assemble pieces together on a desk, .
             </p>
             <p className="mt-3 text-[10px] tracking-[0.2em] text-muted-foreground/70">
               SHORTCUTS: 1–6 SELECT · R RANDOMIZE · CTRL+Z UNDO · E EXPLODE
@@ -597,51 +551,6 @@ function Builder() {
                   >
                     ASSEMBLE EVERYTHING
                   </button>
-
-                  <Dialog open={saveOpen} onOpenChange={setSaveOpen}>
-                    <DialogTrigger asChild>
-                      <button
-                        type="button"
-                        disabled={included.length === 0}
-                        className="rounded-full bg-accent/15 px-6 py-3 text-[10px] tracking-[0.3em] text-accent transition-all duration-500 hover:bg-accent/25 disabled:cursor-not-allowed disabled:opacity-40"
-                      >
-                        SAVE TO GALLERY
-                      </button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>Submit your build</DialogTitle>
-                        <DialogDescription>
-                          {included.length}/{PARTS.length} pieces placed, each with your own colors and
-                          styles. This appears publicly in the community gallery.
-                        </DialogDescription>
-                      </DialogHeader>
-                      <div className="flex flex-col gap-3 py-2">
-                        <Input
-                          placeholder="Build name (e.g. Midnight Rig)"
-                          value={buildName}
-                          onChange={(e) => setBuildName(e.target.value)}
-                          maxLength={40}
-                        />
-                        <Input
-                          placeholder="Your name"
-                          value={authorName}
-                          onChange={(e) => setAuthorName(e.target.value)}
-                          maxLength={30}
-                        />
-                      </div>
-                      <DialogFooter>
-                        <button
-                          type="button"
-                          onClick={handleSave}
-                          disabled={saving || !buildName.trim() || !authorName.trim()}
-                          className="w-full rounded-full bg-accent px-6 py-3 text-[10px] tracking-[0.3em] text-accent-foreground transition-all duration-500 hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
-                        >
-                          {saving ? "SAVING…" : "SUBMIT"}
-                        </button>
-                      </DialogFooter>
-                    </DialogContent>
-                  </Dialog>
                 </div>
               ) : (
                 <p className="mt-2 text-xs font-light leading-relaxed text-muted-foreground">
