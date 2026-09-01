@@ -216,7 +216,7 @@ function Builder() {
             <h2 className="text-cine mt-3 text-2xl">BUILD YOUR SETUP.</h2>
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
               Click a component to select it, then customize its color, style, finish and
-              glow below. Switch to SETUP to assemble pieces together on a desk, .
+              glow below. Switch to SETUP to assemble the pieces together on a desk.
             </p>
             <p className="mt-3 text-[10px] tracking-[0.2em] text-muted-foreground/70">
               SHORTCUTS: 1–6 SELECT · R RANDOMIZE · CTRL+Z UNDO · E EXPLODE
