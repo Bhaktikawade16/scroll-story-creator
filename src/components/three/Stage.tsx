@@ -7,6 +7,7 @@ import {
 } from "@react-three/drei";
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+import type { Category, Material, PartConfig } from "@/lib/setup-types";
 import { SetupModel } from "./SetupModel";
 import {
   ACCENT,
@@ -15,38 +16,49 @@ import {
   LightingModel,
   MonitorModel,
   MouseModel,
+  MousepadModel,
   PCModel,
+  SpeakersModel,
   VIOLET,
+  WebcamModel,
 } from "./parts";
 
-export type Category =
-  | "PC"
-  | "MONITOR"
-  | "KEYBOARD"
-  | "MOUSE"
-  | "CHAIR"
-  | "LIGHTING";
+export type { Category };
 
 function ModelFor({
   category,
   exploded,
+  accent,
+  variant,
+  material,
+  intensity,
 }: {
   category: Category;
   exploded: boolean;
+  accent?: string | undefined;
+  variant?: string | undefined;
+  material?: Material | undefined;
+  intensity?: number | undefined;
 }) {
   switch (category) {
     case "MONITOR":
-      return <MonitorModel />;
+      return <MonitorModel accent={accent} variant={variant} material={material} intensity={intensity} />;
     case "KEYBOARD":
-      return <KeyboardModel />;
+      return <KeyboardModel accent={accent} variant={variant} material={material} intensity={intensity} />;
     case "MOUSE":
-      return <MouseModel />;
+      return <MouseModel accent={accent} variant={variant} material={material} intensity={intensity} />;
     case "CHAIR":
-      return <ChairModel />;
+      return <ChairModel accent={accent} variant={variant} material={material} intensity={intensity} />;
     case "LIGHTING":
-      return <LightingModel />;
+      return <LightingModel accent={accent} variant={variant} intensity={intensity} />;
+    case "WEBCAM":
+      return <WebcamModel accent={accent} variant={variant} material={material} intensity={intensity} />;
+    case "SPEAKERS":
+      return <SpeakersModel accent={accent} variant={variant} material={material} intensity={intensity} />;
+    case "MOUSEPAD":
+      return <MousepadModel accent={accent} variant={variant} intensity={intensity} />;
     default:
-      return <PCModel exploded={exploded} />;
+      return <PCModel exploded={exploded} accent={accent} variant={variant} material={material} intensity={intensity} />;
   }
 }
 
@@ -54,9 +66,17 @@ function ModelFor({
 function Morph({
   category,
   exploded,
+  accent,
+  variant,
+  material,
+  intensity,
 }: {
   category: Category;
   exploded: boolean;
+  accent?: string | undefined;
+  variant?: string | undefined;
+  material?: Material | undefined;
+  intensity?: number | undefined;
 }) {
   const [shown, setShown] = useState(category);
   const pending = useRef(category);
@@ -85,7 +105,14 @@ function Morph({
 
   return (
     <group ref={group}>
-      <ModelFor category={shown} exploded={exploded && shown === "PC"} />
+      <ModelFor
+        category={shown}
+        exploded={exploded && shown === "PC"}
+        accent={accent}
+        variant={variant}
+        material={material}
+        intensity={intensity}
+      />
     </group>
   );
 }
@@ -143,6 +170,29 @@ function ReactiveLights() {
   );
 }
 
+/** A grounded room backdrop: a soft-lit back wall, so the setup reads as sitting
+ *  in a real space rather than floating in a void. The existing infinite Grid
+ *  already serves as the floor, so we don't duplicate it here. */
+function Room() {
+  return (
+    <group>
+      <mesh position={[0, 3.2, -6.5]}>
+        <planeGeometry args={[26, 12]} />
+        <meshStandardMaterial color="#0c1017" roughness={0.95} metalness={0} />
+      </mesh>
+      {/* Soft vertical bounce-light strips on the wall, like daylight through a gap in blinds. */}
+      <mesh position={[-4.2, 3.4, -6.45]}>
+        <planeGeometry args={[1.1, 9]} />
+        <meshBasicMaterial color="#1a2836" transparent opacity={0.5} />
+      </mesh>
+      <mesh position={[3.6, 3.4, -6.45]}>
+        <planeGeometry args={[0.7, 9]} />
+        <meshBasicMaterial color="#1c1424" transparent opacity={0.4} />
+      </mesh>
+    </group>
+  );
+}
+
 function Dust() {
   const ref = useRef<THREE.Points>(null);
   const geo = useRef<THREE.BufferGeometry>(null);
@@ -182,6 +232,10 @@ export default function Stage({
   autoSpin = true,
   className = "",
   setup,
+  accent,
+  variant,
+  material,
+  intensity,
 }: {
   category?: Category | undefined;
   exploded?: boolean | undefined;
@@ -189,7 +243,12 @@ export default function Stage({
   autoSpin?: boolean | undefined;
   className?: string | undefined;
   /** When provided, renders the full desk setup with these pieces assembled. */
-  setup?: string[] | undefined;
+  setup?: PartConfig[] | undefined;
+  /** Accent color + style variant for single-part inspection mode (ignored when `setup` is provided). */
+  accent?: string | undefined;
+  variant?: string | undefined;
+  material?: Material | undefined;
+  intensity?: number | undefined;
 }) {
   const dragRef = useRef(0);
   const state = useRef({ down: false, x: 0, moved: 0 });
@@ -225,32 +284,40 @@ export default function Stage({
       >
         <PerspectiveCamera makeDefault fov={34} position={[0, 0.6, 6.2]} />
         <ReactiveLights />
-        <Environment preset="city" environmentIntensity={0.7} />
+        <Environment preset="city" environmentIntensity={0.55} />
+        <Room />
         <Rig dragRef={dragRef} autoSpin={autoSpin && !exploded}>
           {setup ? (
             <SetupModel active={setup} />
           ) : (
-            <Morph category={category} exploded={exploded} />
+            <Morph
+              category={category}
+              exploded={exploded}
+              accent={accent}
+              variant={variant}
+              material={material}
+              intensity={intensity}
+            />
           )}
         </Rig>
         <Grid
           position={[0, -1.55, 0]}
           args={[40, 40]}
           cellSize={0.6}
-          cellThickness={0.5}
-          cellColor="#12303a"
+          cellThickness={0.35}
+          cellColor="#0f2530"
           sectionSize={3}
-          sectionThickness={0.8}
-          sectionColor="#1d5f74"
-          fadeDistance={22}
-          fadeStrength={1.6}
+          sectionThickness={0.5}
+          sectionColor="#164457"
+          fadeDistance={16}
+          fadeStrength={2.2}
           infiniteGrid
         />
         <ContactShadows
           position={[0, -1.52, 0]}
-          opacity={0.55}
+          opacity={0.7}
           scale={16}
-          blur={2.6}
+          blur={2.2}
           far={5}
           color="#000000"
         />

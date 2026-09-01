@@ -1,9 +1,10 @@
 import { Suspense, lazy, useEffect, useState } from "react";
 import type { Category } from "./three/Stage";
+import type { Material, PartConfig } from "@/lib/setup-types";
 
 const Stage = lazy(() => import("./three/Stage"));
 
-export type { Category };
+export type { Category, PartConfig };
 
 /**
  * Client-only mount for the WebGL stage.
@@ -14,7 +15,11 @@ export function ProductStage(props: {
   exploded?: boolean | undefined;
   onToggleExplode?: (() => void) | undefined;
   autoSpin?: boolean | undefined;
-  setup?: string[] | undefined;
+  setup?: PartConfig[] | undefined;
+  accent?: string | undefined;
+  variant?: string | undefined;
+  material?: Material | undefined;
+  intensity?: number | undefined;
   className?: string | undefined;
 }) {
   const [ready, setReady] = useState(false);
